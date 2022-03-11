@@ -8,40 +8,37 @@ import { MoviePage } from "types/movie";
 function Listing() {
 
     const [pageNumber, setPageNumber] = useState(0);
-    const [movies, setMovies] = useState([]);
+    const [page, setPage] = useState<MoviePage>({
+        content: [],
+        last: true,
+        totalPages: 0,
+        totalElements: 0,
+        size: 12,
+        number: 0,
+        first: true,
+        numberOfElements: 0,
+        empty: true,
+    });
 
     useEffect(() => {
-        const fetchMovies = async () => {
-            const response = await axios.get(`${BASE_URL}/movies?_page=${pageNumber}`);
-            setMovies(response.data);
-        }
-        fetchMovies();
-
-    }, [])
+      axios.get(`${BASE_URL}/movies?size=12&page=${pageNumber}`)
+      .then(response => {
+          const data = response.data as MoviePage;
+          setPage(data);
+      })
+    }, [pageNumber])
 
     return (
         <>
-            <Pagination />
             <div className="container">
                 <div className="row">
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
+                    {page.content.map(movie => (
+                        <div  key={movie.id} className="col-sm-6 col-lg-4 col-xl-3 mb-3">
+                        <MovieCard movie={movie} />
                     </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
+                    ))}
+                 
+                    <Pagination /> 
                 </div>
             </div>
 
