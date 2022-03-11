@@ -28,6 +28,10 @@ function Listing() {
       })
     }, [pageNumber])
 
+    const handlePageChange = (newPageNumber: number) => {
+        setPageNumber(newPageNumber);
+    }
+
     return (
         <>
             <div className="container">
@@ -37,8 +41,7 @@ function Listing() {
                         <MovieCard movie={movie} />
                     </div>
                     ))}
-                 
-                    <Pagination /> 
+                    <Pagination page={page} onChange={handlePageChange}/> 
                 </div>
             </div>
 
